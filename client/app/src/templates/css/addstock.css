@@ -1,0 +1,75 @@
+#addStock {
+    padding: 20px;
+    border: 1px solid #6E6E75;
+    border-radius: 15px;
+    width: 217px;
+    margin: 20px auto;
+    background-color: #101018;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  #addStock h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+  }
+  
+  #addStock form div {
+    margin-bottom: 15px;
+  }
+  
+  #addStock label {
+    font-weight: bold;
+    display: block;
+    color: #fff;
+    font-size: 15px;
+  }
+  
+  #addStock input {
+    background-color: #252539;
+    padding: 8px;
+    border: 0.5px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  #addStock button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  #addStock button:hover {
+    background-color: #0056b3;
+  }
+
+  #quantitySection{
+    display: flex;
+
+  }
+
+  #quantitySection label{
+    margin-right: 10px;
+    margin-top: 4px;
+  }
+
+#tickerlabeldiv{
+    display: flex;
+}
+
+#tickerlabel{
+    margin-top: 6.6px;
+    margin-bottom: -5px;
+}
+
+#ticker{
+    width: 197px;
+}
+
+#quantity{
+    width: 88%;
+}
