@@ -37,12 +37,6 @@ function App() {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/stocks/");
       const data = await response.json();
-      const updatedStocks = await Promise.all(data.map(async (stock) => {
-        const prediction = await getPrediction(stock.ticker);
-        return { ...stock, prediction: prediction };
-        }));
-      // data['prediction']=await getPrediction(data['ticker'])
-
       setStocks(updatedStocks);
     } catch (err) {
       console.log(err);
@@ -66,29 +60,6 @@ function App() {
       const data = await response.json();
       setStocks((prev) => [...prev, data]);
       fetchStocks();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getPrediction = async (tickerSymbol) => {
-    const payload={
-      ticker: tickerSymbol,
-    }
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/stocks/predict/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log(data)
-      return data.predicted_price
     } catch (err) {
       console.log(err);
     }
@@ -157,7 +128,6 @@ function App() {
         stocks={stocks}
         deleteStock={deleteStock}
         updateStock={updateStock}
-        getPrediction={getPrediction}
       />
       </div>
     </>
