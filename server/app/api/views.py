@@ -4,8 +4,6 @@ from rest_framework import status
 from .models import Stock
 from .serializer import StockSerializer
 import requests
-from .predictor.StockPricesPredictor import predict_stock_price, model_predictor
-from threading import Thread
 from decouple import config
 def get_current_price(ticker):
     url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + ticker + '&apikey='+config('API_KEY')
@@ -25,18 +23,7 @@ def get_stocks(request):
     
     for stock in serializedData:
         stock['currentPrice']=get_current_price(stock['ticker'])
-        predict_stock_price(stock['ticker'])
     return Response(serializedData)
-
-@api_view(['POST'])
-def get_prediction(request):
-    try:
-        stock = request.data
-        predicted_price = predict_stock_price(stock['ticker'])
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        return Response({'predicted_price': predicted_price}, status=status.HTTP_200_OK)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
 def get_ticker_name(ticker):
@@ -75,8 +62,6 @@ def create_stock(request):
     
     if not data['name']:
         return Response({'error': 'No match found'}, status=status.HTTP_400_BAD_REQUEST)
-    thread = Thread(target=model_predictor, args=(data['ticker'],))
-    thread.start()
     serializer = StockSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
@@ -104,9 +89,7 @@ def update_stock(request, pk):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     serializer = StockSerializer(original_stock,data=stock)
-    # print(serializer)
     if serializer.is_valid():
-        # print('n')
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
