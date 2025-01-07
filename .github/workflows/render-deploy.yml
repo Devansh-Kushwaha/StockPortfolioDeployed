@@ -1,0 +1,35 @@
+name: Render Deploy
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment when pushing to main branch
+      
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # Use the version you need
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run migrations
+      run: |
+        python manage.py migrate  # Run migrations (if any)
+
+    - name: Deploy to Render
+      run: |
+        curl -sSL https://render.com/cli/install | sh
+        render deploy --service my-service-name  # Change 'my-service-name' to your Render service
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
